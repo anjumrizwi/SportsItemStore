@@ -4,3 +4,6 @@
 /Web/SportsItemsStore.Test/bin
 /Web/SportsItemsStore.v11.suo
 /Web/SportsItemsStore.Test/*.user
+/Web/TestResults
+/Web/SportsItemsStore.WebUI.Test/bin
+/Web/SportsItemsStore.WebUI.Test/obj
