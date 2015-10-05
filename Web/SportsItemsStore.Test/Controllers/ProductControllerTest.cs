@@ -6,7 +6,7 @@ using SportsItemsStore.Domain.Concrete;
 using SportsItemsStore.WebUI.Controllers;
 using SportsItemsStore.WebUI.Models;
 
-namespace SportsItemsStore.Test
+namespace SportsItemsStore.WebUI.Test.Controllers
 {
     [TestClass]
     public class ProductControllerTest
@@ -21,7 +21,7 @@ namespace SportsItemsStore.Test
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void ListTest()
         {
             var controller = new ProductController(_repository);
 
