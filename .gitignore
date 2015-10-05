@@ -7,3 +7,5 @@
 /Web/TestResults
 /Web/SportsItemsStore.WebUI.Test/bin
 /Web/SportsItemsStore.WebUI.Test/obj
+/Web/SportsItemsStore.Domain/bin
+/Web/SportsItemsStore.WebUI.Test/*.user
