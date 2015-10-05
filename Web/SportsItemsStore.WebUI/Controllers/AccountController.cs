@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using SportsItemsStore.Domain.Abstract;
 using SportsItemsStore.Domain.Entities;
@@ -12,27 +9,22 @@ namespace SportsItemsStore.WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private IProductsRepository repository;
+        private readonly IProductsRepository _repository;
 
         public AccountController(IProductsRepository repo)
         {
-            repository = repo;
+            _repository = repo;
         }
 
         public ActionResult Index()
         {
-            
-
             return View();
         }
 
         public ViewResult Login(string returnUrl)
         {
-            LoginViewModel model = new LoginViewModel();
-            model.Username = string.Empty;
-            model.Password = string.Empty;
-            model.returnUrl = returnUrl;
-            this.Session["User"] = null;
+            var model = new LoginViewModel {Username = string.Empty, Password = string.Empty, returnUrl = returnUrl};
+            Session["User"] = null;
 
             return View(model);
         }
@@ -42,31 +34,24 @@ namespace SportsItemsStore.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = repository.Users.FirstOrDefault(item => item.Username.ToLower() == model.Username.ToLower() && item.Password == model.Password);
+                var user = _repository.Users.FirstOrDefault(item => item.Username.ToLower() == model.Username.ToLower() && item.Password == model.Password);
 
                 if (user == null || user.Password != model.Password)
                 {
                     ModelState.AddModelError("","The Username or password id correct");
                     return View(model);
                 }
-                else
+
+                FormsAuthentication.SetAuthCookie(model.Username, false);
+
+                Session["User"] = user;
+
+                if (!string.IsNullOrEmpty(returnUrl) && returnUrl !="/Product/ViewDetails")
                 {
-                 
-                    FormsAuthentication.SetAuthCookie(model.Username, false);
-
-                    Session["User"] = user;
-
-                    //return Redirect(returnUrl ?? @Html.ActionLink("Checkout", "Index", "Cart"));
-
-                    if (returnUrl != "" && returnUrl !=null && returnUrl !="/Product/ViewDetails")
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("List", "Product");
-                    }
+                    return Redirect(returnUrl);
                 }
+
+                return RedirectToAction("List", "Product");
             }
             return View(model);
         }
@@ -76,13 +61,14 @@ namespace SportsItemsStore.WebUI.Controllers
         {
             FormsAuthentication.SignOut();
    
-            this.Session["User"] = null;
+            Session["User"] = null;
+
             return RedirectToAction("List", "Product");
         }
 
         public ActionResult Register(string returnUrl)
         {
-            UserRegistrationModel registerUser = new UserRegistrationModel();
+            var registerUser = new UserRegistrationModel();
 
             return View(registerUser);
         }
@@ -92,29 +78,20 @@ namespace SportsItemsStore.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User existUser = repository.Users.FirstOrDefault(item => item.Username.ToLower() == model.Username.ToLower());
+                var existUser = _repository.Users.FirstOrDefault(item => item.Username.ToLower() == model.Username.ToLower());
                 if (existUser == null)
                 {
+                    var user = new User {Username = model.Username, Password = model.Password, Email = model.Email};
 
-                    User user = new User();
-                    user.Username = model.Username;
-                    user.Password = model.Password;
-                    user.Email = model.Email;
-
-                    repository.SaveUser(user);
-
-                    //int UserId = user.ID;
-                    
+                    _repository.SaveUser(user);
 
                     ViewBag.returnUrl = returnUrl;
                     return View("RegistrationCompleted");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "An User with same User name already exists");
-                    //
-                    return View(model);
-                }
+
+                ModelState.AddModelError("", "An User with same User name already exists");
+                
+                return View(model);
             }
             //
             // If we got this far, something failed, redisplay form!

@@ -15,18 +15,18 @@ Thanks for placing your order. We'll ship your goods as soon as possible.
 <b>Shipping To :</b>
 
 <div class="completed">
-    <p> @Model.shipDtls.Name,</p>
-    <p> @Model.shipDtls.Line1,</p>
-     @if (Model.shipDtls.Line2 != null)
-     {
-         <p> @Model.shipDtls.Line2,</p>
-     }
-      @if (Model.shipDtls.Line3 != null)
-      {  <p>@Model.shipDtls.Line3,</p> 
-      }
-    <p> @Model.shipDtls.City, @Model.shipDtls.State,</p>
-    <p> @Model.shipDtls.Zip,@Model.shipDtls.Country.</p>
- </div>
+    <p>@Model.shipDtls.Name,</p>
+    <p>@Model.shipDtls.Line1,</p>
+    @if (Model.shipDtls.Line2 != null)
+    {
+        <p>@Model.shipDtls.Line2,</p>
+    }
+    @if (Model.shipDtls.Line3 != null)
+    {  <p>@Model.shipDtls.Line3,</p> 
+    }
+    <p>@Model.shipDtls.City, @Model.shipDtls.State,</p>
+    <p>@Model.shipDtls.Zip,@Model.shipDtls.Country.</p>
+</div>
 
 <br />
 
@@ -36,49 +36,41 @@ Thanks for placing your order. We'll ship your goods as soon as possible.
 <table class="table table-hover table-striped table-condensed table-bordered ordersTable">
     <thead>
         <tr>
-             <th align="left" class="columnHeader">Quantity</th>
+            <th align="left" class="columnHeader">Quantity</th>
             <th align="left" class="columnHeader">Item</th>
             <th align="left" class="columnHeader">Price</th>
             <th align="left" class="columnHeader">Subtotal</th>
-            
         </tr>
     </thead>
 
     <tbody>
-          @foreach (var line in Model.crt.Lines)
+        @foreach (var line in Model.crt.Lines)
         {
             <tr>
                 <td align="left">@line.Quantity</td>
                 <td align="left">@line.Product.Name</td>
                 <td align="left">@line.Product.Price.ToString("c")</td>
-                <td align="left">@((line.Quantity * line.Product.Price).ToString("c"))</td>           
+                <td align="left">@((line.Quantity * line.Product.Price).ToString("c"))</td>
             </tr>
         }
-       
+
     </tbody>
-     <tr class="info">
-            <td  align="right" colspan="3">
-                <strong>Total:</strong>
-                &nbsp;
-            </td>
-            <td>
-                <strong> @Model.crt.ComputeTotalValue().ToString("c") </strong>
-            </td>
-         
-        </tr>
-   
+    <tr class="info">
+        <td align="right" colspan="3">
+            <strong>Total:</strong>
+            &nbsp;
+        </td>
+        <td>
+            <strong>@Model.crt.ComputeTotalValue().ToString("c") </strong>
+        </td>
+
+    </tr>
 </table>
-
-
-
-
 
 @{Html.RenderAction("ClearCart", "Cart");}
 
-
 <script type="text/javascript">
     $(document).ready(function () {
-        // $("#cart").hide();
         $("#chkLnk").hide();
         $("DIV.searchFilters").hide();
     });
