@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using SportsItemsStore.WebUI.Models;
 using System.Text;
@@ -10,27 +7,27 @@ namespace SportsItemsStore.WebUI.HtmlHelpers
 {
     public static class PagingHelpers
     {
-        public static MvcHtmlString PageLinks(this HtmlHelper html, PagingInfo pagingInfo, Func< int, string> pageUrl)
+        public static MvcHtmlString PageLinks(this HtmlHelper html, PagingInfo pagingInfo, Func<int, string> pageUrl)
         {
-            int a;
-            StringBuilder result = new StringBuilder();
-            for (int i = 1; i <= pagingInfo.TotalPages; i++)
-            {
+            var result = new StringBuilder();
 
-                TagBuilder tag = new TagBuilder("a"); // Construct an <a> tag
+            for (var i = 1; i <= pagingInfo.TotalPages; i++)
+            {
+                var tag = new TagBuilder("a"); // Construct an <a> tag
 
                 //tag.MergeAttribute("href", pageUrl(i, pagingInfo.SizeId));
 
                 tag.MergeAttribute("href", pageUrl(i));
 
-                
+
                 tag.InnerHtml = i.ToString();
                 if (i == pagingInfo.CurrentPage)
                     tag.AddCssClass("selected");
-                result.Append(tag.ToString());
+
+                result.Append(tag);
             }
+
             return MvcHtmlString.Create(result.ToString());
         }
-
     }
 }
